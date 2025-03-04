@@ -4,7 +4,7 @@
   </div>
 </ng-container>
 
-<form class="example-form" [formGroup]="zendureForm">
+<form class="example-form" [formGroup]="zendureApiForm">
   <mat-form-field class="example-full-width">
     <mat-label>Zendure account email</mat-label>
     <input matInput formControlName="account" placeholder="john@doe.fr" />
@@ -13,11 +13,7 @@
     <mat-label>Inverter serial number</mat-label>
     <input matInput formControlName="snNumber" placeholder="EE1LHMH1M718386" />
   </mat-form-field>
-  <button
-    mat-flat-button
-    [disabled]="zendureForm.invalid || isLoading"
-    (click)="connexion()"
-  >
+  <button mat-flat-button [disabled]="isLoading" (click)="connexion()">
     Connexion
   </button>
 </form>

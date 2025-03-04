@@ -6,6 +6,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ZendureApiResponse } from '../../interfaces';
 
 @Component({
   selector: 'app-zendure-api-step',
@@ -22,28 +23,27 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './zendure-api-step.component.scss',
 })
 export class ZendureApiStepComponent {
-  @Input({ required: true }) zendureForm!: FormGroup;
-  @Output() nextStep = new EventEmitter<void>();
+  @Input({ required: true }) zendureApiForm!: FormGroup;
+  @Output() nextStep = new EventEmitter<ZendureApiResponse>();
 
   isLoading = false;
 
   constructor(private zendureApiService: ZendureApiService) {}
 
   connexion() {
-    if (this.zendureForm.invalid) {
+    if (this.zendureApiForm.invalid) {
       return;
     }
     this.isLoading = true;
 
     this.zendureApiService
       .getMqttCredentials({
-        account: this.zendureForm.get('account')?.value,
-        snNumber: this.zendureForm.get('snNumber')?.value,
+        account: this.zendureApiForm.get('account')?.value,
+        snNumber: this.zendureApiForm.get('snNumber')?.value,
       })
       .subscribe((res) => {
         if (res.success) {
-          this.nextStep.emit();
-        } else {
+          this.nextStep.emit(res);
         }
         this.isLoading = false;
       });

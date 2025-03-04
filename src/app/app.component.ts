@@ -5,7 +5,8 @@ import { HassConfigStepComponent } from './components/hass-config-step/hass-conf
 import { ZendureMqttStepComponent } from './components/zendure-mqtt-step/zendure-mqtt-step.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ZendureMockedData } from './interfaces';
+import { ZendureApiResponse, ZendureMockedData } from './interfaces';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { ZendureMockedData } from './interfaces';
     ZendureApiStepComponent,
     HassConfigStepComponent,
     ZendureMqttStepComponent,
+    JsonPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -21,19 +23,29 @@ import { ZendureMockedData } from './interfaces';
 export class AppComponent {
   @ViewChild(MatStepper) stepper!: MatStepper;
 
-  zendureForm = new FormGroup({
+  zendureApiForm = new FormGroup({
     account: new FormControl('', [Validators.required]),
     snNumber: new FormControl('', [Validators.required]),
   });
 
-  nextStep() {
+  zendureMQTTForm = new FormGroup({
+    appKey: new FormControl('', [Validators.required]),
+    secret: new FormControl('', [Validators.required]),
+  });
+
+  nextStep(event: ZendureApiResponse) {
+    console.log('nextStep', event);
+    this.zendureMQTTForm.patchValue({
+      appKey: event.data.appKey,
+      secret: event.data.secret,
+    });
     this.stepper.next();
   }
 
   constructor(private http: HttpClient) {
     if (isDevMode()) {
       this.http.get<ZendureMockedData>('config.json').subscribe((config) => {
-        this.zendureForm.patchValue({
+        this.zendureApiForm.patchValue({
           account: config.form.account,
           snNumber: config.form.snNumber,
         });
