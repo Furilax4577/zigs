@@ -1,0 +1,18 @@
+<mat-vertical-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="zendureForm">
+    <ng-template matStepLabel>Connexion à l'API Zendure</ng-template>
+    <app-zendure-api-step
+      [zendureForm]="zendureForm"
+      (nextStep)="nextStep()"
+    ></app-zendure-api-step>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Récuppération des topics MQTT</ng-template>
+    <app-zendure-mqtt-step></app-zendure-mqtt-step
+  ></mat-step>
+  <mat-step>
+    <ng-template matStepLabel
+      >Génération du fichier de configuration HASS</ng-template
+    ><app-hass-config-step></app-hass-config-step
+  ></mat-step>
+</mat-vertical-stepper>

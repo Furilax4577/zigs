@@ -1,0 +1,12 @@
+{
+  "api": {
+    "appKey": "",
+    "secret": "",
+    "mqttUrl": "mqtt-eu.zen-iot.com",
+    "port": 1883
+  },
+  "form": {
+    "snNumber": "",
+    "account": ""
+  }
+}

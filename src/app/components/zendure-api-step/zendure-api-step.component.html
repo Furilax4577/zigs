@@ -1,0 +1,23 @@
+<ng-container *ngIf="isLoading">
+  <div class="overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+</ng-container>
+
+<form class="example-form" [formGroup]="zendureForm">
+  <mat-form-field class="example-full-width">
+    <mat-label>Zendure account email</mat-label>
+    <input matInput formControlName="account" placeholder="john@doe.fr" />
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Inverter serial number</mat-label>
+    <input matInput formControlName="snNumber" placeholder="EE1LHMH1M718386" />
+  </mat-form-field>
+  <button
+    mat-flat-button
+    [disabled]="zendureForm.invalid || isLoading"
+    (click)="connexion()"
+  >
+    Connexion
+  </button>
+</form>
