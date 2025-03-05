@@ -1,10 +1,14 @@
 import { FormGroup } from '@angular/forms';
 import { MqttService } from './../../services/mqtt.service';
 import { Component, Input } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @Component({
   selector: 'app-zendure-mqtt-step',
-  imports: [],
+  imports: [MatCardModule, MatChipsModule, MatIconModule, MatBadgeModule],
   templateUrl: './zendure-mqtt-step.component.html',
   styleUrl: './zendure-mqtt-step.component.scss',
 })
@@ -14,16 +18,16 @@ export class ZendureMqttStepComponent {
   constructor(private mqttService: MqttService) {}
 
   ngOnInit() {
-    console.log(this.constructor.name, 'ngOnInit');
     this.mqttService.connect('ws://localhost:3000');
     this.mqttService.sendMessage({
-      appKey: 'MH7dA2cl',
-      secret: 'E0939CD239EC47B999327F172F4AD507',
+      appKey: this.zendureMQTTForm.get('appKey')?.value,
+      secret: this.zendureMQTTForm.get('secret')?.value,
+      mqttUrl: this.zendureMQTTForm.get('mqttUrl')?.value,
+      port: this.zendureMQTTForm.get('port')?.value,
     });
   }
 
   ngOnDestroy() {
-    console.log(this.constructor.name, 'ngOnDestroy');
     this.mqttService.close();
   }
 }

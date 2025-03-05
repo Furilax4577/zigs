@@ -16,8 +16,6 @@ export class MqttService {
       (!this.socket$ || this.socket$.closed)
     ) {
       this.socket$ = webSocket(url);
-
-      // Gérer les messages reçus
       this.socket$.subscribe({
         next: (message) => this.handleMessage(message),
         error: (err) => this.handleError(err),

@@ -31,13 +31,16 @@ export class AppComponent {
   zendureMQTTForm = new FormGroup({
     appKey: new FormControl('', [Validators.required]),
     secret: new FormControl('', [Validators.required]),
+    mqttUrl: new FormControl('mqtt-eu.zen-iot.com', [Validators.required]),
+    port: new FormControl<number>(1883, [Validators.required]),
   });
 
   nextStep(event: ZendureApiResponse) {
-    console.log('nextStep', event);
     this.zendureMQTTForm.patchValue({
       appKey: event.data.appKey,
       secret: event.data.secret,
+      mqttUrl: event.data.mqttUrl,
+      port: event.data.port,
     });
     this.stepper.next();
   }
