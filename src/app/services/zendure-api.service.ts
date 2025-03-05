@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, isDevMode } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   ZendureApiResponse,
   ZendureMockedData,
@@ -21,10 +21,10 @@ export class ZendureApiService {
             code: 200,
             success: true,
             data: {
-              appKey: config.api.appKey,
-              secret: config.api.secret,
-              mqttUrl: 'mqtt-eu.zen-iot.com',
-              port: 1883,
+              appKey: config.mqtt.appKey,
+              secret: config.mqtt.secret,
+              mqttUrl: config.mqtt.mqttUrl ?? 'mqtt-eu.zen-iot.com',
+              port: config.mqtt.port ?? 1883,
             },
             msg: 'Successful operation (Mocked)',
           } as ZendureApiResponse;

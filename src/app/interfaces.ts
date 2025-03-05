@@ -15,13 +15,15 @@ export interface ZendurePostData {
   snNumber: string;
 }
 
+export interface ZendureMqttConfig {
+  appKey: string;
+  secret: string;
+  mqttUrl: string;
+  port: number;
+}
+
 export interface ZendureMockedData {
-  api: {
-    appKey: string;
-    secret: string;
-    mqttUrl: string;
-    port: number;
-  };
+  mqtt: ZendureMqttConfig;
   form: {
     snNumber: string;
     account: string;
