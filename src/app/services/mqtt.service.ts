@@ -1,12 +1,13 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { isPlatformBrowser } from '@angular/common';
+import { MqttMessage } from '../interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MqttService {
-  private socket$: WebSocketSubject<any> | undefined;
+  socket$: WebSocketSubject<MqttMessage> | undefined;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
@@ -34,8 +35,8 @@ export class MqttService {
     this.socket$?.complete();
   }
 
-  private handleMessage(message: any): void {
-    console.log('Message reçu:', message);
+  private handleMessage(mqttMessage: MqttMessage): void {
+    // console.log('Message reçu:', mqttMessage.message);
   }
 
   private handleError(error: any): void {

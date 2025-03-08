@@ -6,7 +6,6 @@ import { ZendureMqttStepComponent } from './components/zendure-mqtt-step/zendure
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ZendureApiResponse, ZendureMockedData } from './interfaces';
-import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +14,6 @@ import { JsonPipe } from '@angular/common';
     ZendureApiStepComponent,
     HassConfigStepComponent,
     ZendureMqttStepComponent,
-    JsonPipe,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

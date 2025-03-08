@@ -1,38 +1,25 @@
-<!-- <mat-card appearance="outlined">
-  <mat-card-header>
-    <mat-card-title>Hyper 2000</mat-card-title>
-    <mat-card-subtitle>Serial: XXX</mat-card-subtitle>
-  </mat-card-header>
-
-  <mat-card-content>aze</mat-card-content>
-
-  <mat-card-footer>
-    <mat-chip-set>
-      <mat-chip matBadge="1"
-        ><mat-icon
-          aria-hidden="false"
-          aria-label="Example home icon"
-          fontIcon="battery_0_bar"
-        ></mat-icon> </mat-chip
-      ><mat-chip matBadge="2"
-        ><mat-icon
-          aria-hidden="false"
-          aria-label="Example home icon"
-          fontIcon="battery_2_bar"
-        ></mat-icon> </mat-chip
-      ><mat-chip matBadge="3"
-        ><mat-icon
-          aria-hidden="false"
-          aria-label="Example home icon"
-          fontIcon="battery_4_bar"
-        ></mat-icon> </mat-chip
-      ><mat-chip matBadge="4"
-        ><mat-icon
-          aria-hidden="false"
-          aria-label="Example home icon"
-          fontIcon="battery_full"
-        ></mat-icon>
-      </mat-chip>
-    </mat-chip-set>
-  </mat-card-footer>
-</mat-card> -->
+<div class="devices" [matBadge]="messageCount">
+  <div class="device" *ngFor="let device of devices | keyvalue">
+    <h2 class="title">
+      Hyper 2000 <span>Serial Number: {{ device.value.sn }}</span>
+    </h2>
+    <div class="sensors">
+      <div
+        class="sensor"
+        *ngFor="let sensor of device.value.sensors | keyvalue"
+      >
+        <h3>{{ sensor.value.name }}</h3>
+        <p>
+          {{
+            getSensorState(
+              device.key,
+              sensor.value.name,
+              sensor.value.unit_of_measurement
+            )
+          }}
+          {{ sensor.value.unit_of_measurement }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
