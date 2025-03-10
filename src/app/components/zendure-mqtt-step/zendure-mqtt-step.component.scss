@@ -1,19 +1,52 @@
 :host {
-  h2 {
+  fa-icon {
+    margin-left: 10px;
+    cursor: pointer;
+  }
+
+  h3 {
+    margin-bottom: 0;
     display: flex;
-    span {
-      margin-left: auto;
-    }
+    align-items: center;
+  }
+  h4 {
+    margin-bottom: 15px;
   }
   .devices {
     padding: 15px;
   }
 
   .device {
-    padding: 0 15px 15px 15px;
+    padding: 15px;
     border: 1px solid white;
     & + .device {
       margin-top: 15px;
+    }
+    display: flex;
+    flex-direction: row;
+  }
+
+  .inverter {
+  }
+
+  .batteries {
+    padding: 15px;
+    margin-left: auto;
+    width: 300px;
+    min-width: 300px;
+    max-width: 300px;
+  }
+
+  .battery {
+    flex: 1;
+    padding-bottom: 10px;
+    h5 {
+      display: flex;
+      justify-content: end;
+      align-items: end;
+      strong {
+        margin-right: auto;
+      }
     }
   }
 
@@ -24,12 +57,26 @@
 
   .sensor {
     padding: 0 15px;
-    border: 1px solid grey;
     h3 {
       margin-bottom: 0;
     }
     p {
       margin-top: 5px;
+    }
+  }
+
+  .modal-content {
+    background: #333;
+    padding: 30px;
+    .title {
+      display: flex;
+      align-items: center;
+      fa-icon {
+        margin-right: 15px;
+      }
+    }
+    p {
+      margin-bottom: 30px;
     }
   }
 }

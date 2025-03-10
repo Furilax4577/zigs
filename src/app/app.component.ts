@@ -1,25 +1,32 @@
-import { Component, isDevMode, ViewChild } from '@angular/core';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { Component, isDevMode } from '@angular/core';
 import { ZendureApiStepComponent } from './components/zendure-api-step/zendure-api-step.component';
 import { HassConfigStepComponent } from './components/hass-config-step/hass-config-step.component';
 import { ZendureMqttStepComponent } from './components/zendure-mqtt-step/zendure-mqtt-step.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { ZendureApiResponse, ZendureMockedData } from './interfaces';
+import {
+  ZendureApiResponse,
+  ZendureDevices,
+  ZendureMockedData,
+} from './interfaces';
+import { MainMenuComponent } from './components/main-menu/main-menu.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [
-    MatStepperModule,
     ZendureApiStepComponent,
     HassConfigStepComponent,
     ZendureMqttStepComponent,
+    MainMenuComponent,
+    CommonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  @ViewChild(MatStepper) stepper!: MatStepper;
+  mqttDisplay = false;
+  devices: ZendureDevices = {};
 
   zendureApiForm = new FormGroup({
     account: new FormControl('', [Validators.required]),
@@ -40,7 +47,7 @@ export class AppComponent {
       mqttUrl: event.data.mqttUrl,
       port: event.data.port,
     });
-    this.stepper.next();
+    this.mqttDisplay = true;
   }
 
   constructor(private http: HttpClient) {

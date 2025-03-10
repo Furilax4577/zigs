@@ -1,25 +1,136 @@
-<div class="devices" [matBadge]="messageCount">
+<div class="devices">
   <div class="device" *ngFor="let device of devices | keyvalue">
-    <h2 class="title">
-      Hyper 2000 <span>Serial Number: {{ device.value.sn }}</span>
-    </h2>
-    <div class="sensors">
-      <div
-        class="sensor"
-        *ngFor="let sensor of device.value.sensors | keyvalue"
-      >
-        <h3>{{ sensor.value.name }}</h3>
-        <p>
-          {{
-            getSensorState(
-              device.key,
-              sensor.value.name,
-              sensor.value.unit_of_measurement
-            )
-          }}
-          {{ sensor.value.unit_of_measurement }}
-        </p>
+    <ng-container *ngIf="device.value.sn">
+      <div class="inverter">
+        <h3 class="title is-3">
+          {{ getModelNameBySerialNumber(device.value.sn) }}
+          <fa-icon
+            [icon]="infoIcon"
+            class="has-text-info fa-xs"
+            (click)="inverterNameModalOpened = !inverterNameModalOpened"
+          ></fa-icon>
+        </h3>
+        <h4>SN:{{ device.value.sn }}</h4>
+        <div class="sensors">
+          <div
+            class="sensor"
+            *ngFor="let sensor of device.value.sensors | keyvalue"
+          >
+            <h3>{{ sensor.value.name }}</h3>
+            <p>
+              {{
+                getSensorState(
+                  device.key,
+                  sensor.value.name,
+                  sensor.value.unit_of_measurement
+                )
+              }}{{ sensor.value.unit_of_measurement }}
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+      <div class="batteries">
+        <h4 class="title is-4">
+          Batteries
+          <fa-icon
+            [icon]="infoIcon"
+            class="has-text-info fa-xs"
+            (click)="batteriesModalOpened = !batteriesModalOpened"
+          ></fa-icon>
+        </h4>
+        <div
+          class="battery"
+          *ngFor="let battery of device.value.batteries | keyvalue"
+        >
+          <h5>
+            <strong>{{
+              getModelNameBySerialNumber(battery.value.sn, "Batterie inconnu")
+            }}</strong>
+            {{ battery.value.sn }}
+          </h5>
+          <progress
+            *ngIf="!getDeviceBatteryLevel(device.key)"
+            class="progress is-small is-primary"
+            max="100"
+          ></progress
+          ><progress
+            *ngIf="getDeviceBatteryLevel(device.key)"
+            class="progress is-small is-primary"
+            value="{{ getDeviceBatteryLevel(device.key) }}"
+            max="100"
+          >
+            {{ getDeviceBatteryLevel(device.key) }}%
+          </progress>
+        </div>
+      </div></ng-container
+    >
+  </div>
+</div>
+
+<article class="message is-danger" *ngIf="!devices">
+  <div class="message-header">
+    <p>En attentes des capteurs</p>
+  </div>
+  <div class="message-body">
+    Le temps fera son affaire, mais sans capteurs, Home Assistant restera aussi
+    perdu qu'un GPS sans satellite !
+  </div>
+</article>
+
+<div class="modal" [class.is-active]="inverterNameModalOpened">
+  <div class="modal-background" (click)="inverterNameModalOpened = false"></div>
+  <div class="modal-content">
+    <p class="title">
+      <fa-icon
+        [icon]="infoIcon"
+        class="has-text-info"
+        (click)="inverterNameModalOpened = !inverterNameModalOpened"
+      ></fa-icon
+      >Identification du matériel
+    </p>
+    <p>
+      Actuellement, l'identification se base sur le numéro de série du matériel.
+    </p>
+    <p>
+      Zendure ne communique pas sur la structure de ces numéros, mais vous
+      pouvez nous aider !
+    </p>
+    <p>
+      <strong>Comment ?</strong> Lorsqu'un nouveau modèle est détecté, une
+      pop-up s'affiche pour vous demander d'indiquer de quel matériel il s'agit.
+    </p>
+    <p>
+      Si vous ne connaissez pas la réponse, vous pouvez trouver cette
+      information dans l'application Zendure.
+    </p>
+    <button class="button is-info" (click)="inverterNameModalOpened = false">
+      J'ai compris
+    </button>
+  </div>
+</div>
+
+<div class="modal" [class.is-active]="batteriesModalOpened">
+  <div class="modal-background" (click)="batteriesModalOpened = false"></div>
+  <div class="modal-content">
+    <p class="title">
+      <fa-icon
+        [icon]="infoIcon"
+        class="has-text-info"
+        (click)="batteriesModalOpened = !batteriesModalOpened"
+      ></fa-icon
+      >Liste des batteries
+    </p>
+    <p>
+      Le niveau actuel de chaque batterie dépend de l'état MQTT "electricLevel"
+      et ne reflète pas nécessairement la valeur réelle.
+    </p>
+    <p>
+      Il est possible qu'une ou plusieurs batteries n'apparaissent pas dans ce
+      dashboard, notamment si elles sont en veille prolongée (par exemple, en
+      cas de protection contre le froid ou la surchauffe).
+    </p>
+    <button class="button is-info" (click)="batteriesModalOpened = false">
+      J'ai compris
+    </button>
   </div>
 </div>

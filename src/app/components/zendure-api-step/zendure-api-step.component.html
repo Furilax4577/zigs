@@ -1,19 +1,44 @@
-<ng-container *ngIf="isLoading">
-  <div class="overlay">
-    <mat-spinner></mat-spinner>
+<form [formGroup]="zendureApiForm">
+  <div class="field">
+    <label class="label">Zendure account email</label>
+    <div class="control">
+      <input
+        class="input"
+        type="text"
+        formControlName="account"
+        placeholder="john@doe.fr"
+      />
+    </div>
   </div>
-</ng-container>
-
-<form class="example-form" [formGroup]="zendureApiForm">
-  <mat-form-field class="example-full-width">
-    <mat-label>Zendure account email</mat-label>
-    <input matInput formControlName="account" placeholder="john@doe.fr" />
-  </mat-form-field>
-  <mat-form-field class="example-full-width">
-    <mat-label>Inverter serial number</mat-label>
-    <input matInput formControlName="snNumber" placeholder="EE1LHMH1M718386" />
-  </mat-form-field>
-  <button mat-flat-button [disabled]="isLoading" (click)="connexion()">
-    Connexion
-  </button>
+  <div class="field">
+    <label class="label">Inverter serial number</label>
+    <div class="control">
+      <input
+        class="input"
+        type="text"
+        formControlName="snNumber"
+        placeholder="EE1LHMH1M718386"
+      />
+    </div>
+  </div>
+  <div class="field is-grouped">
+    <div class="control">
+      <button
+        [class.is-loading]="isLoading"
+        (click)="connexion()"
+        class="button is-link"
+      >
+        Connexion
+      </button>
+    </div>
+  </div>
 </form>
+
+<article class="message is-danger" *ngIf="errorMessage">
+  <div class="message-header">
+    <p>Connexion impossible</p>
+  </div>
+  <div class="message-body">
+    {{ errorMessage }}
+  </div>
+</article>

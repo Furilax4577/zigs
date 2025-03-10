@@ -66,9 +66,9 @@ export interface ZendureDeviceBattery {
 }
 
 export interface ZendureDeviceSensor {
+  name: string;
   command_topic: string;
   device_class: string;
-  name: string;
   state_topic: string;
   unique_id: string;
   unit_of_measurement: string;
@@ -85,4 +85,9 @@ export interface ZendureDevice {
   sn: string;
   sensors: { [key: string]: ZendureDeviceSensor };
   switches: { [key: string]: ZendureDeviceSwitch };
+  batteries: { [key: string]: ZendureDeviceBattery };
+}
+
+export interface ZendureDevices {
+  [key: string]: ZendureDevice;
 }

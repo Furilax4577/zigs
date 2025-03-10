@@ -1,29 +1,27 @@
-<mat-vertical-stepper linear #stepper>
-  <mat-step [stepControl]="zendureMQTTForm" [editable]="false">
-    <ng-template matStepLabel>Connexion à l'API Zendure</ng-template>
-    <ng-template matStepContent>
+<app-main-menu></app-main-menu>
+
+<div class="main">
+  <ng-container *ngIf="!mqttDisplay">
+    <div class="block">
+      <h2 class="title is-2">Connexion à l'API Zendure</h2>
       <app-zendure-api-step
         [zendureApiForm]="zendureApiForm"
         (nextStep)="nextStep($event)"
-      ></app-zendure-api-step
-    ></ng-template>
-  </mat-step>
+      ></app-zendure-api-step>
+    </div>
+  </ng-container>
 
-  <mat-step [editable]="false">
-    <ng-template matStepLabel>Récuppération des topics MQTT</ng-template>
-    <ng-template matStepContent
-      ><app-zendure-mqtt-step
+  <ng-container *ngIf="mqttDisplay">
+    <div class="block">
+      <h2 class="title is-2">Récuppération des topics MQTT</h2>
+      <app-zendure-mqtt-step
         [zendureMQTTForm]="zendureMQTTForm"
-      ></app-zendure-mqtt-step
-    ></ng-template>
-  </mat-step>
+      ></app-zendure-mqtt-step>
+    </div>
+  </ng-container>
 
-  <mat-step [editable]="false">
-    <ng-template matStepLabel
-      >Génération du fichier de configuration HASS</ng-template
-    >
-    <ng-template matStepContent>
-      <app-hass-config-step></app-hass-config-step
-    ></ng-template>
-  </mat-step>
-</mat-vertical-stepper>
+  <div class="block">
+    <h2 class="title is-2">Génération du fichier de configuration HASS</h2>
+    <app-hass-config-step></app-hass-config-step>
+  </div>
+</div>
