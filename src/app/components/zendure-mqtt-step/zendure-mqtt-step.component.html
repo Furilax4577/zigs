@@ -38,6 +38,8 @@
             (click)="batteriesModalOpened = !batteriesModalOpened"
           ></fa-icon>
         </h4>
+        <ng-container *ngIf="getObjectCount(device.value.batteries)">
+        </ng-container>
         <div
           class="battery"
           *ngFor="let battery of device.value.batteries | keyvalue"
@@ -61,6 +63,9 @@
           >
             {{ getDeviceBatteryLevel(device.key) }}%
           </progress>
+        </div>
+        <div class="no_battery" *ngIf="!getObjectCount(device.value.batteries)">
+          Aucune batteries détectée
         </div>
       </div></ng-container
     >

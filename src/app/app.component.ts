@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 import {
   ZendureApiResponse,
   ZendureDevices,
+  ZendureDeviceSensor,
   ZendureMockedData,
 } from './interfaces';
 import { MainMenuComponent } from './components/main-menu/main-menu.component';
@@ -27,6 +28,7 @@ import { CommonModule } from '@angular/common';
 export class AppComponent {
   mqttDisplay = false;
   devices: ZendureDevices = {};
+  sensors: ZendureDeviceSensor[] = [];
 
   zendureApiForm = new FormGroup({
     account: new FormControl('', [Validators.required]),

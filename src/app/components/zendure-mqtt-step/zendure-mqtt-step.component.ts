@@ -12,6 +12,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule, KeyValuePipe } from '@angular/common';
 
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { ZendureSensorsService } from '../../services/zendure-sensors.service';
 
 @Component({
   selector: 'app-zendure-mqtt-step',
@@ -21,7 +22,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 })
 export class ZendureMqttStepComponent {
   @Input({ required: true }) zendureMQTTForm!: FormGroup;
-  @Output() energySensors = new EventEmitter<ZendureDeviceSensor[]>();
+  @Output() updatedSensors = new EventEmitter<ZendureDeviceSensor[]>();
 
   infoIcon = faInfoCircle;
   messageCount: number = 0;
@@ -29,10 +30,16 @@ export class ZendureMqttStepComponent {
   inverterNameModalOpened: boolean = false;
   batteriesModalOpened: boolean = false;
 
+  sensors: { [key: string]: ZendureDeviceSensor } = {};
   devices: { [key: string]: ZendureDevice } = {};
   states: { [key: string]: ZendureMessageState } = {};
 
-  constructor(private mqttService: MqttService) {}
+  private _sensorArray: ZendureDeviceSensor[] = [];
+
+  constructor(
+    private mqttService: MqttService,
+    private zendureSensorsService: ZendureSensorsService
+  ) {}
 
   ngOnInit() {
     this.mqttService.connect('ws://localhost:3000');
@@ -56,6 +63,19 @@ export class ZendureMqttStepComponent {
         case 'sensor':
           const deviceSensor = data.message as ZendureDeviceSensor;
           const deviceUUID = deviceSensor.state_topic.split('/')[1];
+
+          if (!this.sensors[deviceSensor.unique_id]) {
+            // Détection d'un nouveau capteur
+            this.sensors[deviceSensor.unique_id] =
+              this.nameKeyFirstPosition(deviceSensor);
+            const sensors = Object.entries(this.sensors).map(
+              ([key, sensor]) => {
+                return sensor;
+              }
+            );
+            this.zendureSensorsService.updateSensors(sensors);
+          }
+
           if (!this.devices[deviceUUID]) {
             this.devices[deviceUUID] = {
               uuid: deviceUUID,
@@ -101,19 +121,6 @@ export class ZendureMqttStepComponent {
           }
           break;
       }
-
-      const zendureDeviceSensor: ZendureDeviceSensor[] = [];
-      for (const [deviceKey, device] of Object.entries(this.devices)) {
-        for (const [sensorKey, sensor] of Object.entries(device.sensors)) {
-          // console.log(sensorKey, sensorValue);
-          zendureDeviceSensor.push({
-            ...sensor,
-            name: `${deviceKey} ${sensor.name}`,
-          });
-        }
-      }
-      console.log(zendureDeviceSensor);
-      this.energySensors.next(zendureDeviceSensor);
     });
   }
 
@@ -169,6 +176,24 @@ export class ZendureMqttStepComponent {
 
   getDeviceBatteryLevel(deviceUUID: string) {
     return this.states[deviceUUID].electricLevel ?? null;
+  }
+
+  getObjectCount(object: Object): number {
+    return Object.keys(object).length;
+  }
+
+  nameKeyFirstPosition(sensor: ZendureDeviceSensor): ZendureDeviceSensor {
+    const removed = this.removeKeys(sensor, ['name']);
+    return { name: sensor.name, ...removed };
+  }
+
+  removeKeys<T extends Record<string, any>, K extends keyof T>(
+    obj: T,
+    keys: K[]
+  ): Omit<T, K> {
+    const newObj = { ...obj };
+    keys.forEach((key) => delete newObj[key]);
+    return newObj;
   }
 
   ngOnDestroy() {

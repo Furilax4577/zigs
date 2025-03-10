@@ -1,1 +1,16 @@
-<pre>{{ test }}</pre>
+<div class="checkboxes">
+  <label class="checkbox" *ngFor="let checkbox of checkboxes">
+    <input type="checkbox" [checked]="isChecked(checkbox)" />
+    {{ checkbox }}
+  </label>
+</div>
+
+<pre>
+# Cette partie à pour but de déclarer les capteurs retournés par le serveur MQTT de Zendure
+
+{{ sensors }}
+
+# Cette partie à pour but de déclarer les intégrations nécessaire au dashboard "Énergie" de HASS
+
+{{ integrations }}
+</pre>
